@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peringatan: Website Menakutkan</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Warning Section */
+        .warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .warning-content {
+            max-width: 600px;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #ff3333;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .warning h1 {
+            color: #ff3333;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .warning p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .warning-btn {
+            padding: 12px 30px;
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .warning-btn:hover {
+            background-color: #ff6666;
+            transform: scale(1.05);
+        }
+
+        /* Main Content - Initially Hidden */
+        .main-content {
+            display: none;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Horror Story Section */
+        .story {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .story h2 {
+            color: #ff6666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .story p {
+            margin-bottom: 15px;
+            text-align: justify;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        /* Jumpscare Elements */
+        .jumpscare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .jumpscare img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Interactive Elements */
+        .interactive-element {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-element:hover {
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .interactive-element::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ff3333;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s;
+        }
+
+        .interactive-element:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Animation Classes */
+        .reveal {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+
+            .warning-content {
+                width: 95%;
+                padding: 15px;
+                margin: 0 10px;
+            }
+
+            .warning h1 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .warning p {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+
+            .warning-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .story {
+                padding: 15px;
+                margin-top: 30px;
+            }
+
+            .interactive-element {
+                margin: 20px 0;
+                padding: 15px;
+            }
+
+            footer {
+                margin-top: 30px;
+                padding: 15px;
+                font-size: 0.8rem;
+            }
+
+            .jumpscare img {
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .warning h1 {
+                font-size: 1.3rem;
+            }
+
+            .story h2 {
+                font-size: 1.2rem;
+            }
+
+            .interactive-element h3 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Warning Screen -->
+    <div class="warning">
+        <div class="warning-content">
+            <h1>PERINGATAN</h1>
+            <p>Website ini berisi konten menakutkan dengan jumpscare yang tiba-tiba. Kami tidak bertanggung jawab atas efek psikologis yang mungkin timbul. Lanjutkan hanya jika Anda berani.</p>
+            <button class="warning-btn" id="enterBtn">MASUK JIKA BERANI</button>
+        </div>
+    </div>
+
+    <!-- Main Content (Initially Hidden) -->
+    <div class="main-content">
+        <h1 style="text-align: center; margin: 20px 0; color: #ff4444; font-size: 1.8rem;">RUMAH TERKUTUK</h1>
+        
+        <div class="story">
+            <h2>Kisah Malam Itu</h2>
+            <p>Malam itu, angin berhembus kencang menerpa jendela kamarku yang tua. Aku mencoba untuk tidur, tetapi sesuatu terasa tidak beres...</p>
+            <p>Jam dinding berdetak perlahan, tapi kudengar satu detakan ekstra di antara yang lainnya. Aku membuka mataku perlahan...</p>
+            <p>Lalu kulihat bayangan tinggi berdiri di sudut kamar. Bentuknya seperti manusia, tapi terlalu tinggi, terlalu kurus...</p>
+            <p>Tiba-tiba listrik padam. Gelap. Hanya terdengar napas berat di dekat telingaku...</p>
+        </div>
+
+        <div class="interactive-element" id="doorElement">
+            <h3>Ketuk Pintu Ini</h3>
+            <p>Apa yang menunggu di baliknya?</p>
+        </div>
+
+        <div class="interactive-element" id="mirrorElement">
+            <h3>Lihat ke Cermin</h3>
+            <p>Tapi berani melihat apa yang ada di belakangmu?</p>
+        </div>
+
+        <div class="interactive-element" id="lastElement">
+            <h3>JANGAN Sentuh Ini</h3>
+            <p>Aku sudah memperingatkanmu...</p>
+        </div>
+
+        <footer>
+            © 2023 Rumah Terkutuk - Jangan tidur malam ini...
+        </footer>
+    </div>
+
+    <!-- Jumpscare Overlay -->
+    <div class="jumpscare" id="jumpscare">
+        <img src="pocong.jpeg" alt="Seram wajah hantu dengan mata merah menyala, mulut terbuka lebar menunjukkan gigi tajam, dan kulit pucat seperti mayat" />
+    </div>
+
+    <script>
+        // DOM Elements
+        const warning = document.querySelector('.warning');
+        const enterBtn = document.getElementById('enterBtn');
+        const mainContent = document.querySelector('.main-content');
+        const jumpscare = document.getElementById('jumpscare');
+        const storyParagraphs = document.querySelectorAll('.story p');
+        const interactiveElements = document.querySelectorAll('.interactive-element');
+        
+        // Audio for effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playScarySound() {
+            try {
+                // Create oscillator for scary sound
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 100;
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Modulate frequency for scary effect
+                oscillator.frequency.exponentialRampToValueAtTime(
+                    1000, 
+                    audioContext.currentTime + 0.5
+                );
+                
+                // Modulate gain
+                gainNode.gain.exponentialRampToValueAtTime(
+                    0.5, 
+                    audioContext.currentTime + 0.3
+                );
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 1);
+                
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+        
+        // Enter button click handler
+        enterBtn.addEventListener('click', () => {
+            warning.style.opacity = '0';
+            setTimeout(() => {
+                warning.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Animate story paragraphs one by one
+                storyParagraphs.forEach((p, i) => {
+                    setTimeout(() => {
+                        p.classList.add('reveal');
+                        
+                        // Random chance for a subtle scare
+                        if (Math.random() < 0.3 && i > 1) {
+                            playScarySound();
+                            document.body.style.backgroundColor = '#1a0000';
+                            setTimeout(() => {
+                                document.body.style.backgroundColor = '#121212';
+                            }, 300);
+                        }
+                    }, i * 2000);
+                });
+            }, 500);
+        });
+        
+        // Interactive element handlers
+        interactiveElements.forEach(el => {
+            el.addEventListener('click', function() {
+                playScarySound();
+                
+                // Different reactions based on which element was clicked
+                if (this.id === 'doorElement') {
+                    // Knock sound effect
+                    const knockTimes = 3;
+                    for (let i = 0; i < knockTimes; i++) {
+                        setTimeout(() => {
+                            playKnockSound();
+                            this.style.boxShadow = '0 0 15px rgba(255, 0, 0, 0.5)';
+                            setTimeout(() => {
+                                this.style.boxShadow = 'none';
+                            }, 200);
+                        }, i * 300);
+                    }
+                    
+                    setTimeout(() => {
+                        showJumpscare();
+                    }, knockTimes * 300 + 500);
+                    
+                } else if (this.id === 'mirrorElement') {
+                    this.innerHTML = '<h3>KAMU TIDAK SENDIRI</h3><p>Ada sesuatu di belakangmu...</p>';
+                    document.body.style.filter = 'invert(1)';
+                    setTimeout(() => {
+                        document.body.style.filter = 'none';
+                        showJumpscare();
+                    }, 1000);
+                    
+                } else if (this.id === 'lastElement') {
+                    // Most intense scare
+                    document.body.style.overflow = 'hidden';
+                    document.documentElement.style.overflow = 'hidden';
+                    
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            showJumpscare();
+                            setTimeout(() => {
+                                jumpscare.style.display = 'none';
+                            }, 300);
+                        }, i * 400);
+                    }
+                    
+                    setTimeout(() => {
+                        showJumpscare();
+                        setTimeout(() => {
+                            jumpscare.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                            document.documentElement.style.overflow = 'auto';
+                            this.innerHTML = '<h3>KENAPA TIDAK MENDENGARKAN?</h3><p>Sekarang dia tahu tentangmu...</p>';
+                        }, 1000);
+                    }, 2000);
+                }
+            });
+        });
+        
+        function playKnockSound() {
+            try {
+                const osc = audioContext.createOscillator();
+                const env = audioContext.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = 100;
+                osc.connect(env);
+                env.connect(audioContext.destination);
+                
+                env.gain.setValueAtTime(0, audioContext.currentTime);
+                env.gain.linearRampToValueAtTime(0.7, audioContext.currentTime + 0.01);
+                env.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                console.log('Knock sound error:', e);
+            }
+        }
+        
+        function showJumpscare() {
+            jumpscare.style.display = 'flex';
+            playScarySound();
+            
+            // Random jumpscare duration
+            const duration = 300 + Math.random() * 400;
+            
+            setTimeout(() => {
+                jumpscare.style.display = 'none';
+            }, duration);
+        }
+        
+        // Random ambient sounds
+        function playAmbientSound() {
+            try {
+                const osc = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = 30;
+                osc.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                gainNode.gain.value = 0.01;
+                
+                // Random modulation
+                setInterval(() => {
+                    if (Math.random() < 0.3) {
+                        osc.frequency.value = 30 + Math.random() * 70;
+                        gainNode.gain.value = 0.02 + Math.random() * 0.03;
+                    }
+                }, 3000);
+                
+                osc.start();
+            } catch (e) {
+                console.log('Ambient sound error:', e);
+            }
+        }
+        
+        // Start ambient sounds after user interaction
+        document.addEventListener('click', function startAmbient() {
+            playAmbientSound();
+            document.removeEventListener('click', startAmbient);
+        });
+        
+        // Random scare triggers
+        setInterval(() => {
+            if (Math.random() < 0.02 && mainContent.style.display === 'block') {
+                // Small chance for random micro-scare
+                document.body.style.backgroundColor = '#1a0000';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#121212';
+                }, 100);
+                
+                if (Math.random() < 0.5) {
+                    playScarySound();
+                }
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
+
